@@ -1,0 +1,8 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Exec=curl -L https://raw.githubusercontent.com/the-outcaster/competitive-smash-decker/main/competitive-smash-decker.sh | sh
+Icon=steamdeck-gaming-return
+Name=Competitive Smash Decker
+StartupNotify=false
+Terminal=true
+Type=Application
