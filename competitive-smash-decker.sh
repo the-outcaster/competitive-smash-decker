@@ -70,7 +70,7 @@ slippi_menu() {
 	--column ""\
 	--column "Option"\
 	--column="Description"\
-	FALSE Launcher "Download or update the Slippi Launcher"\
+	FALSE Download "Download or update the Slippi Launcher"\
 	FALSE Launch_Launcher "Launch Slippi Launcher"\
 	FALSE Slippi "Configure or play Slippi (without launcher)"\
 	TRUE Exit "Exit this submenu"
@@ -168,7 +168,7 @@ Choice=$(main_menu)
 			if [ $? -eq 1 ] || [ "$Choice" == "Exit" ]; then
 				break
 			
-			elif [ "$Choice" == "Launcher" ]; then
+			elif [ "$Choice" == "Download" ]; then
 				mkdir -p Slippi-Launcher
 				
 				DOWNLOAD_URL=$(curl -s https://api.github.com/repos/project-slippi/slippi-launcher/releases/latest \
@@ -192,11 +192,10 @@ Choice=$(main_menu)
 					error "Slippi AppImage not found."
 				else
 					exec "$slippi"
-				fi				
-			done
+				fi
 			fi
 		done
-	
+
 	elif [ "$Choice" == "Project+" ]; then
 		
 		while true; do
