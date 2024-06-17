@@ -92,9 +92,8 @@ hdr_menu() {
 	--column ""\
 	--column "Option"\
 	--column="Description"\
-	FALSE Download "Download or update HDR"\
-	FALSE Configure "Configure Ryujinx"\
-	FALSE Play "Launch HDR with Ryujinx"\
+	FALSE Download "Download or update HDR (latest beta) for Yuzu"\
+	FALSE Resources "Get save data, legacy discovery, and other tools needed for HDR to work"\
 	TRUE Exit "Exit this submenu"
 }
 
@@ -109,7 +108,7 @@ slippi_launcher=$HOME/Applications/Slippi-Launcher/Slippi-Launcher.AppImage
 slippi=$HOME/.config/Slippi\ Launcher/netplay/Slippi_Online-x86_64.AppImage
 project_plus=$HOME/Applications/ProjectPlus/Faster_Project_Plus-x86-64.AppImage
 
-ryujinx=$HOME/Applications/publish/Ryujinx
+#yuzu=$HOME/Applications/yuzu-mainline.AppImage
 
 # Check if GitHub is reachable
 if ! curl -Is https://github.com | head -1 | grep 200 > /dev/null
@@ -254,8 +253,8 @@ Choice=$(main_menu)
 			elif [ "$Choice" == "Download" ]; then
 				mkdir -p HDR
 				
-				if ! [ -d $HOME/.config/Ryujinx ]; then
-					error "Ryujinx configuration not found, please install Ryujinx via EmuDeck and run it at least once to generate the config files/folders."
+				if ! [ -d $HOME/.local/share/yuzu ]; then
+					error "Yuzu configuration not found, please download Yuzu 1734 (the AppImage) and run it at least once to generate the config files/folders."
 					break
 				fi
 		
@@ -273,31 +272,49 @@ Choice=$(main_menu)
 				unzip -o -q HDR/hdr.zip -d HDR
 					
 				echo "70"
-				echo "# Copying HDR to Ryujinx..."
-				cp -r HDR/sdcard $HOME/.config/Ryujinx/
+				echo "# Copying HDR to Yuzu..."
+				cp -r HDR/sdcard/atmosphere $HOME/Emulation/storage/yuzu/sdmc/
+				cp -r HDR/sdcard/ultimate $HOME/Emulation/storage/yuzu/sdmc/
 
 				echo "95"
 				echo "# Cleaning up..."
-				rm HDR/hdr.zip
+				rm -r HDR
 				) | progress_bar ""
 					
 				info "HDR successfully downloaded and installed!"
-				info "Please run Smash Ultimate once with Ryujinx to generate the necessary files/folders."
+				info "Please run Smash Ultimate once to generate the necessary files/folders."
 
-			elif [ "$Choice" == "Configure" ]; then
-				if ! [ -f $ryujinx ]; then
-					error "Ryujinx not found, please install it via EmuDeck and run it at least once."
-				else			
-					exec $ryujinx
+			elif [ "$Choice" == "Resources" ]; then
+				mkdir -p HDR
+
+				if ! [ -d $HOME/Emulation/storage/yuzu/sdmc/ultimate/arcropolis ]; then
+					error "Arcropolis folder not found, please run Smash Ultimate at least once after HDR is installed to generate the config files/folders."
+					break
 				fi
-			
-			elif [ "$Choice" == "Play" ]; then
-				if ! [ -f $ultimate_ROM ]; then
-					error "SSBU dump not found. Please place it in $HOME/Emulation/roms/switch/ and name it to ssbu.nsp"
-				else
-					exec $ryujinx $ultimate_ROM
-				fi
-			
+
+				(
+				echo "20"
+				echo "# Adding legacy discovery..."
+				sleep 1
+				touch legacy_discovery $HOME/Emulation/storage/yuzu/sdmc/ultimate/arcropolis/config/*/*/
+
+				echo "50"
+				echo "# Downloading save data..."
+				sleep 1
+
+
+				echo "70"
+				echo "# Copying HDR to Yuzu..."
+				cp -r HDR/sdcard/atmosphere $HOME/Emulation/storage/yuzu/sdmc/
+				cp -r HDR/sdcard/ultimate $HOME/Emulation/storage/yuzu/sdmc/
+
+				echo "95"
+				echo "# Cleaning up..."
+				rm -r HDR
+				) | progress_bar ""
+
+				info "HDR successfully downloaded and installed!"
+				info "Please run Smash Ultimate once to generate the necessary files/folders."
 			fi
 		done
 	
