@@ -107,6 +107,7 @@ ultimate_ROM=$HOME/Emulation/roms/switch/ssbu.nsp
 slippi_launcher=$HOME/Applications/Slippi-Launcher/Slippi-Launcher.AppImage
 slippi=$HOME/.config/Slippi\ Launcher/netplay/Slippi_Online-x86_64.AppImage
 project_plus=$HOME/Applications/ProjectPlus/Faster_Project_Plus-x86-64.AppImage
+hdr_launcher=$HOME/Applications/HDR/HDRLauncher.AppImage
 
 # Check if GitHub is reachable
 if ! curl -Is https://github.com | head -1 | grep 200 > /dev/null
@@ -242,7 +243,6 @@ Choice=$(main_menu)
 		done
 	
 	elif [ "$Choice" == "HDR" ]; then
-		
 		while true; do
 		Choice=$(hdr_menu)
 			if [ $? -eq 1 ] || [ "$Choice" == "Exit" ]; then
@@ -255,11 +255,14 @@ Choice=$(main_menu)
 					| grep "browser_download_url" \
 					| grep AppImage \
 					| cut -d '"' -f 4)
-				curl -L "$DOWNLOAD_URL" -o HDR/HDRLauncher.AppImage
+				curl -L "$DOWNLOAD_URL" -o $hdr_launcher
 
-				chmod +x HDR/HDRLauncher.AppImage
+				chmod +x $hdr_launcher
 					
 				info "HDR Launcher downloaded!"
+
+			#elif [ "$Choice" == "Launcher" ]; then
+				#exec $hdr_launcher
 
 			elif [ "$Choice" == "Resources" ]; then
 				if ! [ -d $HOME/.local/share/yuzu/sdmc/ultimate/arcropolis ]; then
@@ -300,9 +303,9 @@ Choice=$(main_menu)
 				if ( question "Would you like to download a pre-configured Steam Deck template for controls and graphics settings?" ); then
 				yes |
 					wget https://raw.githubusercontent.com/the-outcaster/competitive-smash-decker/main/qt-config.ini
-					mv qtconfig.ini $HOME/.config/yuzu/
+					mv qt-config.ini $HOME/.config/yuzu/
 				else
-					break
+					echo "\nSteam Deck pre-configured template skipped."
 				fi
 				) | progress_bar ""
 
