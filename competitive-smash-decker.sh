@@ -281,7 +281,8 @@ Choice=$(main_menu)
 				echo "# Downloading save data..."
 				sleep 1
 				wget https://github.com/the-outcaster/competitive-smash-decker/raw/main/100_save_data-1.zip
-				unzip -o -q 100_save_data-1.zip -d $HOME/.local/share/yuzu/nand/user/save/*/*/01006A800016E000/
+				SAVE_FOLDER=$(find $HOME/.local/share/yuzu/nand/user/save/0000000000000000/*/ -mindepth 1 -maxdepth 1 -type d | sed -n '2p') # get the second directory
+				unzip -o -q 100_save_data-1.zip -d $SAVE_FOLDER
 				rm 100_save_data-1.zip
 
 				echo "70"
