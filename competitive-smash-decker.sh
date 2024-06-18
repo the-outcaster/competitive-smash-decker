@@ -93,7 +93,7 @@ hdr_menu() {
 	--column "Option"\
 	--column="Description"\
 	FALSE Download "Download or update HDR (latest beta) for Yuzu"\
-	FALSE Resources "Get save data, legacy discovery, and other tools needed for HDR to work"\
+	FALSE Resources "Get save data, legacy discovery, latency slider, and configure online multiplayer"\
 	TRUE Exit "Exit this submenu"
 }
 
@@ -273,8 +273,8 @@ Choice=$(main_menu)
 					
 				echo "70"
 				echo "# Copying HDR to Yuzu..."
-				cp -r HDR/sdcard/atmosphere $HOME/Emulation/storage/yuzu/sdmc/
-				cp -r HDR/sdcard/ultimate $HOME/Emulation/storage/yuzu/sdmc/
+				cp -r HDR/sdcard/atmosphere $HOME/.local/share/yuzu/sdmc/
+				cp -r HDR/sdcard/ultimate $HOME/.local/share/yuzu/sdmc/
 
 				echo "95"
 				echo "# Cleaning up..."
@@ -287,34 +287,44 @@ Choice=$(main_menu)
 			elif [ "$Choice" == "Resources" ]; then
 				mkdir -p HDR
 
-				if ! [ -d $HOME/Emulation/storage/yuzu/sdmc/ultimate/arcropolis ]; then
+				if ! [ -d $HOME/.local/share/yuzu/sdmc/ultimate/arcropolis ]; then
 					error "Arcropolis folder not found, please run Smash Ultimate at least once after HDR is installed to generate the config files/folders."
 					break
 				fi
 
 				(
 				echo "20"
-				echo "# Adding legacy discovery..."
+				echo "# Adding legacy discovery file..."
 				sleep 1
-				touch legacy_discovery $HOME/Emulation/storage/yuzu/sdmc/ultimate/arcropolis/config/*/*/
+				touch legacy_discovery
+				mv legacy_discovery $HOME/.local/share/yuzu/sdmc/ultimate/arcropolis/config/*/*/
 
 				echo "50"
 				echo "# Downloading save data..."
 				sleep 1
-
+				wget https://github.com/the-outcaster/competitive-smash-decker/raw/main/100_save_data-1.zip
+				unzip -o -q 100_save_data-1.zip -d $HOME/.local/share/yuzu/nand/user/save/*/*/01006A800016E000/
+				rm 100_save_data-1.zip
 
 				echo "70"
-				echo "# Copying HDR to Yuzu..."
-				cp -r HDR/sdcard/atmosphere $HOME/Emulation/storage/yuzu/sdmc/
-				cp -r HDR/sdcard/ultimate $HOME/Emulation/storage/yuzu/sdmc/
+				echo "# Downloading latency slider plugin..."
+				sleep 1
+				DOWNLOAD_URL=$(curl -s https://api.github.com/repos/saad-script/local-latency-slider/releases/latest \
+					| grep "browser_download_url" \
+					| grep .nro \
+					| cut -d '"' -f 4)
+				curl -L "$DOWNLOAD_URL" -o $HOME/.local/share/yuzu/sdmc/atmosphere/contents/01006A800016E000/romfs/skyline/plugins/liblocal_latency_slider.nro
 
-				echo "95"
-				echo "# Cleaning up..."
-				rm -r HDR
+				echo "90"
+				echo "# Configurating multiplayer lobby settings..."
+				sleep 1
+				sed -i 's/web_api_url\\default=true/web_api_url\\default=false/' $HOME/.config/yuzu/qt-config.ini
+				sleep 1
+				sed -i 's|web_api_url=https:/api.yuzu-emu.org|web_api_url=api.ynet-fun.xyz|' $HOME/.config/yuzu/qt-config.ini
+				sleep 1
 				) | progress_bar ""
 
-				info "HDR successfully downloaded and installed!"
-				info "Please run Smash Ultimate once to generate the necessary files/folders."
+				info "HDR resources successfully downloaded and installed!"
 			fi
 		done
 	
