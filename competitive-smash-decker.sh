@@ -93,7 +93,6 @@ hdr_menu() {
 	--column "Option"\
 	--column="Description"\
 	FALSE Download "Download or update the HDR Launcher"\
-	FALSE SteamDeck "Download a pre-configured Steam Deck template for Yuzu for controls and graphics settings"\
 	FALSE Resources "Get save data, legacy discovery, latency slider, and configure online multiplayer"\
 	TRUE Exit "Exit this submenu"
 }
@@ -300,7 +299,11 @@ Choice=$(main_menu)
 
 				if ( question "Would you like to download a pre-configured Steam Deck template for controls and graphics settings?" ); then
 				yes |
-
+					wget https://raw.githubusercontent.com/the-outcaster/competitive-smash-decker/main/qt-config.ini
+					mv qtconfig.ini $HOME/.config/yuzu/
+				else
+					break
+				fi
 				) | progress_bar ""
 
 				info "HDR resources successfully downloaded and installed!"
