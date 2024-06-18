@@ -1,5 +1,5 @@
 # Competitive Smash Decker
-The goal of this project is to be the ultimate Swiss army knife for all things *Smash* on Steam Deck/Linux. Easily download, update, and install Smash 64 Remix, Slippi, Project+, Lylat, Project M EX Remix, and HewDraw Remix. You can also overclock your GameCube controller adapter, provided that you have a sudo password.
+The goal of this project is to be the ultimate Swiss army knife for all things *Smash* on Steam Deck/Linux. Easily download, update, and install Smash 64 Remix, Slippi, Project+, and HewDraw Remix. You can also overclock your GameCube controller adapter, provided that you have a sudo password.
 
 That being said, there will still need to be a little bit of legwork needed on your part -- at least during the initial couple of steps -- which is detailed below.
 
@@ -14,13 +14,9 @@ That being said, there will still need to be a little bit of legwork needed on y
 - [Project+](https://projectplusgame.com/)
   - download and extract the latest patch
   - configure or play Project+
-- Project M EX Remix
-  - manual download of PMEX Remix
-  - configure and play Project+/PMEX Remix
 - [Smash Ultimate HDR](https://github.com/HDR-Development/HDR-Releases)
-  - download the latest (stable) HDR patch and install them for Ryujinx
-  - configure Ryujinx settings
-  - launch HDR directly with Ryujinx
+  - download the latest beta and install it for Yuzu
+  - automatic creation of `legacy_discovery`, 100% save data, [Yuzu latency slider](https://github.com/saad-script/local-latency-slider), and configuration of the `qtconfig.ini` file for online multiplayer once the game has been run at least once
 - overclock the GCC adapter
   - if the overclock module already exists you have the option to uninstall
   
@@ -36,12 +32,12 @@ This repository does NOT contain any copyrighted assets. You must provide your o
 
 ### 1. Install Emulators
 Please run [EmuDeck](https://www.emudeck.com/) first to get the necessary emulators installed. Emulators you'll want to install, if they're not installed already, include:
-- Mupen64 (N64)
-- Ryujinx (Switch)
+- Mupen64 for Smash Remix
+- Yuzu 1734 for HDR
 
-Slippi, Lylat, and Project+/PMEX Remix already come with their own AppImage.
+Good luck finding an AppImage for Yuzu 1734.
 
-After that run the Mupen64 and Ryujinx emulators at least once to generate the configuration files.
+Slippi and Project+/PMEX Remix already come with their own AppImage.
 
 ### 2. Copy ROMs
 Place your legally-dumped ROMs/ISOs in:
@@ -62,7 +58,7 @@ Other distros can run the script with:
 ## Notes
 
 ### Adding to Steam
-**Mods are downloaded to `~/Applications/`.** Smash 64 Remix and HDR can be added as non-Steam shortcuts with Steam ROM Manager -- included with EmuDeck. Slippi, Lylat, and Project+/PMEX Remix will need to be manually added to Steam at the moment.
+**Mods are downloaded to `~/Applications/`.** Smash 64 Remix and HDR can be added as non-Steam shortcuts with Steam ROM Manager -- included with EmuDeck. Slippi and Project+/PMEX Remix will need to be manually added to Steam at the moment.
 
 ### Smash 64 Remix
 After adding Mupen GUI and Smash 64 as non-Steam shortcuts, you may want to configure some of the controls and video options with Mupen GUI. Launch Mupen GUI through Steam and configure from there.
@@ -73,17 +69,18 @@ After adding Mupen GUI and Smash 64 as non-Steam shortcuts, you may want to conf
 ### Project+/PMEX Remix
 **You'll need to manually configure your default ISO, SD card path, and launcher directory with Project+ and PMEX Remix.** Additionally, if you switch between playing Project+ and PMEX Remix, you'll need to keep changing the SD card path to switch between mods.
 
-You *may* need to set the graphics backend to Vulkan if all you get is a white screen when launching either mod.
+You *may* need to **set the graphics backend to Vulkan** if all you get is a white screen when launching either mod.
 
 As with Slippi, **don't use HD textures**; it will cause the emulator to crash if pre-fetching is enabled.
 
-If you're planning on playing PMEX Remix, you'll need to download it manually for now until I can figure out a way to download the latest release through the script.
+If you're planning on playing PMEX Remix, you'll need to [download it manually](https://drive.google.com/drive/folders/1SpYOUHSKDrml6Ol1jwA4-JAX4TI9Ea0H) for now until I can figure out a way to download the latest release through the script.
 
 ### HDR Guide
-If you're planning on playing HDR, you'll need to:
+If you're planning on playing HDR, you'll need to have:
 
-- copy `prod.keys` to `~/.config/Ryujinx/system/`
-- dump your SSBU DLC and updates (13.0.1) and install these with the emulator you're using
-- dump your Switch FW and install it
+- a `prod.keys` file, placed in `~/.local/share/yuzu/keys/`
+- a dump of update 13.0.2 and any DLC you might have in addition to the base dump itself
+
+Install these files with Yuzu.
 
 After you've downloaded the latest HDR patch with the script, you'll need to run Smash Ultimate at least once to generate the `arcropolis` folder inside of `sdmc` and `sdcard`.
