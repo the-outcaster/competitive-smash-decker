@@ -283,7 +283,7 @@ Choice=$(main_menu)
 				wget https://github.com/the-outcaster/competitive-smash-decker/raw/main/100_save_data-1.zip
 				PROFILE_FOLDER="$HOME/.local/share/yuzu/nand/user/save/0000000000000000"
 				for d in "$PROFILE_FOLDER"/*; do
-					unzip -o -q 100_save_data-1.zip -d "$d/01006A800016E000"
+					unzip -o -q 100_save_data-1.zip -d "$d/01006A800016E000" # unzip the save data to every profile
 				done
 				rm 100_save_data-1.zip
 
