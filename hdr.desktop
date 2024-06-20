@@ -1,0 +1,8 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Exec=/home/deck/Applications/HDR/./HDRLauncher.AppImage
+Icon=/home/deck/Applications/HDR/hdr.jpg
+Name=HDR Launcher
+StartupNotify=false
+Terminal=false
+Type=Application
