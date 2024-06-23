@@ -93,8 +93,8 @@ hdr_menu() {
 	--column "Option"\
 	--column="Description"\
 	FALSE Download "Download or update the HDR Launcher"\
-	FALSE Resources "Get save data, legacy discovery, latency slider, and configure online multiplayer"\
 	FALSE Shortcut "Add a HDR Launcher shortcut to your desktop and Applications menu"\
+	FALSE Resources "Get save data, legacy discovery, latency slider, and configure online multiplayer"\
 	TRUE Exit "Exit this submenu"
 }
 
@@ -262,8 +262,20 @@ Choice=$(main_menu)
 					
 				info "HDR Launcher downloaded!"
 
-			#elif [ "$Choice" == "Launcher" ]; then
-				#exec $hdr_launcher
+			elif [ "$Choice" == "Shortcut" ]; then
+				echo -e "\nDownloading icon..."
+				sleep 1
+				wget https://raw.githubusercontent.com/the-outcaster/competitive-smash-decker/main/hdr.jpg
+				mv hdr.jpg $HOME/Applications/HDR/
+
+				echo -e "\nFetching .desktop file..."
+				sleep 1
+				wget https://github.com/the-outcaster/competitive-smash-decker/raw/main/hdr.desktop
+				cp hdr.desktop $HOME/Desktop/
+				cp hdr.desktop $HOME/.local/share/applications/
+				rm hdr.desktop
+
+				info "HDR Launcher added to desktop and Games menu!"
 
 			elif [ "$Choice" == "Resources" ]; then
 				if ! [ -d $HOME/.local/share/yuzu/sdmc/ultimate/arcropolis ]; then
@@ -314,22 +326,6 @@ Choice=$(main_menu)
 				) | progress_bar ""
 
 				info "HDR resources successfully downloaded and installed!"
-
-			elif [ "$Choice" == "Shortcut" ]; then
-				echo -e "\nDownloading icon..."
-				sleep 1
-				wget https://raw.githubusercontent.com/the-outcaster/competitive-smash-decker/main/hdr.jpg
-				mv hdr.jpg $HOME/Applications/HDR/
-
-				echo -e "\nFetching .desktop file..."
-				sleep 1
-				wget https://github.com/the-outcaster/competitive-smash-decker/raw/main/hdr.desktop
-				cp hdr.desktop $HOME/Desktop/
-				cp hdr.desktop $HOME/.local/share/applications/
-				rm hdr.desktop
-
-				info "HDR Launcher added to desktop and All Applications menu!"
-
 			fi
 		done
 	

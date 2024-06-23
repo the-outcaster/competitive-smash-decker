@@ -5,4 +5,5 @@ Icon=/home/deck/Applications/HDR/hdr.jpg
 Name=HDR Launcher
 StartupNotify=false
 Terminal=false
+Categories=Game;
 Type=Application
