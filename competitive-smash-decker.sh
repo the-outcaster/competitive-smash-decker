@@ -85,7 +85,7 @@ projectplus_menu() {
 	FALSE Configure "Configure or play Project+"\
 	FALSE Changelog "View changelog (will open your web browser)"\
 	FALSE Shortcut "Create desktop and Applications shortcut"\
-	FALSE SteamDeck "Download a pre-configured Steam Deck graphics template"\
+	FALSE SteamDeck "Download a pre-configured Steam Deck graphics and configuration template"\
 	TRUE Exit "Exit this submenu"
 }
 
@@ -264,14 +264,22 @@ Choice=$(main_menu)
 			elif [ "$Choice" == "SteamDeck" ]; then
 				if ( question "This will overwrite any existing settings that you have for Project+. Proceed?" ); then
 				yes |
-					echo -e "\nDownloading template..."
+					echo -e "\nDownloading configuration template..."
 					sleep 1
 					wget https://github.com/the-outcaster/competitive-smash-decker/raw/main/projectplus/Dolphin.ini
+
+					echo -e "\nDownloading graphics template..."
+					sleep 1
+					wget https://github.com/the-outcaster/competitive-smash-decker/raw/main/projectplus/GFX.ini
 
 					echo -e "\nMoving configuration file..."
 					sleep 1
 					mkdir -p $HOME/.config/FasterPPlus/ # make this dir in case the user hasn't run P+ yet
 					mv Dolphin.ini $HOME/.config/FasterPPlus/
+
+					echo -e "\nMoving graphics config file..."
+					sleep 1
+					mv GFX.ini $HOME/.config/FasterPPlus/
 
 					info "Steam Deck template downloaded!"
 				else
