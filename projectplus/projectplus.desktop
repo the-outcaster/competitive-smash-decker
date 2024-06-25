@@ -1,0 +1,9 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Exec=/home/deck/Applications/ProjectPlus/Faster_Project_Plus-x86-64.AppImage
+Icon=/home/deck/Applications/ProjectPlus/dolphin.ico
+Name=Project+
+StartupNotify=false
+Terminal=false
+Categories=Game;
+Type=Application

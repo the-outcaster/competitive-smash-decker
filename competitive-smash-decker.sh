@@ -83,7 +83,9 @@ projectplus_menu() {
 	--column="Description"\
 	FALSE Download "Download or update Project+"\
 	FALSE Configure "Configure or play Project+"\
-	False Changelog "View changelog (will open your web browser)"\
+	FALSE Changelog "View changelog (will open your web browser)"\
+	FALSE Shortcut "Create desktop and Applications shortcut"\
+	FALSE SteamDeck "Download a pre-configured Steam Deck graphics template"\
 	TRUE Exit "Exit this submenu"
 }
 
@@ -240,6 +242,17 @@ Choice=$(main_menu)
 			
 			elif [ "$Choice" == "Changelog" ]; then
 				xdg-open https://projectplusgame.com/changes
+
+			elif [ "$Choice" == "Shortcut" ]; then
+				echo -e "\nFetching icon..."
+				sleep 1
+				wget https://raw.githubusercontent.com/FunctionDJ/project-plus-assets/master/logos/v3/dolphin.ico
+				mv dolphin.ico $HOME/Applications/ProjectPlus/
+
+				echo -e "\nFetching desktop shortcut..."
+				sleep 1
+				wget
+				wget
 			fi
 		done
 	
