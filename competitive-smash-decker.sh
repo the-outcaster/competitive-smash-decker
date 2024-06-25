@@ -264,8 +264,14 @@ Choice=$(main_menu)
 			elif [ "$Choice" == "SteamDeck" ]; then
 				echo -e "\nDownloading template..."
 				sleep 1
-				wget
+				wget https://github.com/the-outcaster/competitive-smash-decker/raw/main/projectplus/Dolphin.ini
 
+				echo -e "\nMoving configuration file..."
+				sleep 1
+				mkdir -p $HOME/.local/FasterPPlus/ # make this dir in case the user hasn't run P+ yet
+				mv Dolphin.ini $HOME/.local/FasterPPlus/
+
+				info "Steam Deck template downloaded!"
 			fi
 		done
 	
