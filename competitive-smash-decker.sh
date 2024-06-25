@@ -251,8 +251,21 @@ Choice=$(main_menu)
 
 				echo -e "\nFetching desktop shortcut..."
 				sleep 1
+				wget https://github.com/the-outcaster/competitive-smash-decker/raw/main/projectplus/projectplus.desktop
+
+				echo -e "\nCopying to desktop..."
+				cp projectplus.desktop $HOME/Desktop/
+				echo -e "\nCopying to Applications menu..."
+				cp projectplus.desktop $HOME/.local/share/applications/
+				rm projectplus.desktop
+
+				info "Project+ shortcut added!"
+
+			elif [ "$Choice" == "SteamDeck" ]; then
+				echo -e "\nDownloading template..."
+				sleep 1
 				wget
-				wget
+
 			fi
 		done
 	
