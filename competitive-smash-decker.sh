@@ -262,16 +262,21 @@ Choice=$(main_menu)
 				info "Project+ shortcut added!"
 
 			elif [ "$Choice" == "SteamDeck" ]; then
-				echo -e "\nDownloading template..."
-				sleep 1
-				wget https://github.com/the-outcaster/competitive-smash-decker/raw/main/projectplus/Dolphin.ini
+				if ( question "This will overwrite any existing settings that you have for Project+. Proceed?" ); then
+				yes |
+					echo -e "\nDownloading template..."
+					sleep 1
+					wget https://github.com/the-outcaster/competitive-smash-decker/raw/main/projectplus/Dolphin.ini
 
-				echo -e "\nMoving configuration file..."
-				sleep 1
-				mkdir -p $HOME/.local/FasterPPlus/ # make this dir in case the user hasn't run P+ yet
-				mv Dolphin.ini $HOME/.local/FasterPPlus/
+					echo -e "\nMoving configuration file..."
+					sleep 1
+					mkdir -p $HOME/.config/FasterPPlus/ # make this dir in case the user hasn't run P+ yet
+					mv Dolphin.ini $HOME/.config/FasterPPlus/
 
-				info "Steam Deck template downloaded!"
+					info "Steam Deck template downloaded!"
+				else
+					echo -e "\nUser canceled."
+				fi
 			fi
 		done
 	
