@@ -384,6 +384,7 @@ Choice=$(main_menu)
 				) | progress_bar ""
 
 				info "HDR resources successfully downloaded and installed!"
+			fi
 		done
 
 	elif [ "$Choice" == "HDR_RYU" ]; then
