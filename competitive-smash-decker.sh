@@ -52,6 +52,7 @@ main_menu() {
 	FALSE Slippi "Super Smash Bros. Melee with online multiplayer"\
 	FALSE Project+ "A continuation of Project M that turns SSBB into a more competitive game"\
 	FALSE HDR "Smash Ultimate with competitive mechanics"\
+	FALSE HDR_RYU "HDR for Ryujinx"\
 	FALSE Overclock "Overclock your GCC adapter (root password required)"\
 	TRUE Exit "Exit this script"
 }
@@ -100,6 +101,17 @@ hdr_menu() {
 	TRUE Exit "Exit this submenu"
 }
 
+hdr_ryu_menu() {
+	zen_nospam --width 700 --height 350 --list --radiolist --multiple --title "$title"\
+	--column ""\
+	--column "Option"\
+	--column="Description"\
+	FALSE Download "Download or update the HDR Launcher"\
+	FALSE Shortcut "Add a HDR Launcher shortcut to your desktop and Applications menu"\
+	FALSE Save "Get save data"\
+	TRUE Exit "Exit this submenu"
+}
+
 # roms
 smash64_ROM=$HOME/Emulation/roms/n64/smash64.z64
 melee_ROM=$HOME/Emulation/roms/gamecube/ssbm.iso
@@ -111,6 +123,7 @@ slippi_launcher=$HOME/Applications/Slippi-Launcher/Slippi-Launcher.AppImage
 slippi=$HOME/.config/Slippi\ Launcher/netplay/Slippi_Online-x86_64.AppImage
 project_plus=$HOME/Applications/ProjectPlus/Faster_Project_Plus-x86-64.AppImage
 hdr_launcher=$HOME/Applications/HDR/HDRLauncher.AppImage
+hdr_ryu_launcher=$HOME/Applications/HDR-Ryujinx/HDRLauncher.AppImage
 
 # Check if GitHub is reachable
 if ! curl -Is https://github.com | head -1 | grep 200 > /dev/null
@@ -371,6 +384,49 @@ Choice=$(main_menu)
 				) | progress_bar ""
 
 				info "HDR resources successfully downloaded and installed!"
+		done
+
+	elif [ "$Choice" == "HDR_RYU" ]; then
+		while true; do
+		Choice=$(hdr_ryu_menu)
+			if [ $? -eq 1 ] || [ "$Choice" == "Exit" ]; then
+				break
+
+			elif [ "$Choice" == "Download" ]; then
+				mkdir -p HDR-Ryujinx
+
+				DOWNLOAD_URL=$(curl -s https://api.github.com/repos/techyCoder81/hdr-launcher-react/releases/latest \
+					| grep "browser_download_url" \
+					| grep AppImage \
+					| cut -d '"' -f 4)
+				curl -L "$DOWNLOAD_URL" -o $hdr_ryu_launcher
+
+				chmod +x $hdr_ryu_launcher
+
+				info "HDR Launcher for Ryujinx downloaded!"
+
+			elif [ "$Choice" == "Shortcut" ]; then
+				echo -e "\nDownloading icon..."
+				sleep 1
+				wget https://raw.githubusercontent.com/the-outcaster/competitive-smash-decker/main/hdr.jpg
+				mv hdr.jpg $HOME/Applications/HDR-Ryujinx/
+
+				echo -e "\nFetching .desktop file..."
+				sleep 1
+				wget https://github.com/the-outcaster/competitive-smash-decker/raw/main/hdr-ryujinx/hdr-ryujinx.desktop
+				cp hdr-ryujinx.desktop $HOME/Desktop/
+				cp hdr-ryujinx.desktop $HOME/.local/share/applications/
+				rm hdr-ryujinx.desktop
+
+				info "HDR Launcher for Ryujinx added to desktop and Games menu!"
+
+			elif [ "$Choice" == "Save" ]; then
+				echo -e "\nFetching save file..."
+				sleep 1
+				wget https://github.com/the-outcaster/competitive-smash-decker/raw/main/100_save_data-1.zip
+				mv 100_save_data-1.zip $HOME/Downloads/
+
+				info "HDR save file saved to $HOME/Downloads/. Open Ryujinx -> Right-click Smash Ultimate -> Open User Save Directory and extract the save file to this location."
 			fi
 		done
 	
