@@ -15,7 +15,7 @@ That being said, there will still need to be a little bit of legwork needed on y
   - download and extract the latest patch
   - configure or play Project+
 - [Smash Ultimate HDR](https://github.com/HDR-Development/HDR-Releases)
-  - download the latest beta and install it for Yuzu
+  - download or update the HDR Launcher
   - automatic creation of `legacy_discovery`, 100% save data, [Yuzu latency slider](https://github.com/saad-script/local-latency-slider), and configuration of the `qtconfig.ini` file for online multiplayer once the game has been run at least once
 - overclock the GCC adapter
   - if the overclock module already exists you have the option to uninstall
@@ -67,7 +67,7 @@ After adding Mupen GUI and Smash 64 as non-Steam shortcuts, you may want to conf
 **The use of HD textures is discouraged.** The reason being is, Slippi does *not* support the pre-fetching of custom textures on Linux (the emulator will just crash as soon as the game is launched). Loading custom textures without pre-fetching them can make the game stutter-y.
 
 ### Project+/PMEX Remix
-**You'll need to manually configure your default ISO, SD card path, and launcher directory with Project+ and PMEX Remix.** Additionally, if you switch between playing Project+ and PMEX Remix, you'll need to keep changing the SD card path to switch between mods.
+If you switch between playing Project+ and PMEX Remix, you'll need to keep changing the SD card path to switch between mods.
 
 You *may* need to **set the graphics backend to Vulkan** if all you get is a white screen when launching either mod.
 
@@ -83,4 +83,4 @@ If you're planning on playing HDR, you'll need to have:
 
 Install these files with Yuzu.
 
-After you've downloaded the latest HDR patch with the script, you'll need to run Smash Ultimate at least once to generate the `arcropolis` folder inside of `sdmc` and `sdcard`.
+Download HDR Launcher with the script, then open it to install HDR. Run *Smash Ultimate* once to generate the `arcropolis` folder, close Yuzu, then run "Resources" to get HDR properly working.
