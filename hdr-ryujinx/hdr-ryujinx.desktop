@@ -1,9 +1,0 @@
-#!/usr/bin/env xdg-open
-[Desktop Entry]
-Exec=/home/deck/Applications/HDR-Ryujinx/./HDRLauncher.AppImage
-Icon=/home/deck/Applications/HDR-Ryujinx/hdr.jpg
-Name=HDR Launcher (Ryujinx)
-StartupNotify=false
-Terminal=false
-Categories=Game;
-Type=Application

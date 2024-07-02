@@ -52,7 +52,6 @@ main_menu() {
 	FALSE Slippi "Super Smash Bros. Melee with online multiplayer"\
 	FALSE Project+ "A continuation of Project M that turns SSBB into a more competitive game"\
 	FALSE HDR "Smash Ultimate with competitive mechanics"\
-	FALSE HDR_RYU "HDR for Ryujinx"\
 	FALSE Overclock "Overclock your GCC adapter (root password required)"\
 	TRUE Exit "Exit this script"
 }
@@ -285,6 +284,10 @@ Choice=$(main_menu)
 					sleep 1
 					wget https://github.com/the-outcaster/competitive-smash-decker/raw/main/projectplus/GFX.ini
 
+					echo -e "\nDownloading Steam Deck controller profile..."
+					sleep 1
+					wget https://github.com/the-outcaster/competitive-smash-decker/raw/main/projectplus/deck.ini
+
 					echo -e "\nMoving configuration file..."
 					sleep 1
 					mkdir -p $HOME/.config/FasterPPlus/ # make this dir in case the user hasn't run P+ yet
@@ -293,6 +296,12 @@ Choice=$(main_menu)
 					echo -e "\nMoving graphics config file..."
 					sleep 1
 					mv GFX.ini $HOME/.config/FasterPPlus/
+
+					echo -e "\nMoving controller profile..."
+					sleep 1
+					mkdir -p $HOME/.config/FasterPPlus/Profiles/ # make this dir in case the user hasn't run P+ yet
+					mkdir -p $HOME/.config/FasterPPlus/Profiles/GCPad/
+					mv deck.ini $HOME/.config/FasterPPlus/Profiles/GCPad/
 
 					info "Steam Deck template downloaded!"
 				else
@@ -387,50 +396,6 @@ Choice=$(main_menu)
 			fi
 		done
 
-	elif [ "$Choice" == "HDR_RYU" ]; then
-		while true; do
-		Choice=$(hdr_ryu_menu)
-			if [ $? -eq 1 ] || [ "$Choice" == "Exit" ]; then
-				break
-
-			elif [ "$Choice" == "Download" ]; then
-				mkdir -p HDR-Ryujinx
-
-				DOWNLOAD_URL=$(curl -s https://api.github.com/repos/techyCoder81/hdr-launcher-react/releases/latest \
-					| grep "browser_download_url" \
-					| grep AppImage \
-					| cut -d '"' -f 4)
-				curl -L "$DOWNLOAD_URL" -o $hdr_ryu_launcher
-
-				chmod +x $hdr_ryu_launcher
-
-				info "HDR Launcher for Ryujinx downloaded!"
-
-			elif [ "$Choice" == "Shortcut" ]; then
-				echo -e "\nDownloading icon..."
-				sleep 1
-				wget https://raw.githubusercontent.com/the-outcaster/competitive-smash-decker/main/hdr.jpg
-				mv hdr.jpg $HOME/Applications/HDR-Ryujinx/
-
-				echo -e "\nFetching .desktop file..."
-				sleep 1
-				wget https://github.com/the-outcaster/competitive-smash-decker/raw/main/hdr-ryujinx/hdr-ryujinx.desktop
-				cp hdr-ryujinx.desktop $HOME/Desktop/
-				cp hdr-ryujinx.desktop $HOME/.local/share/applications/
-				rm hdr-ryujinx.desktop
-
-				info "HDR Launcher for Ryujinx added to desktop and Games menu!"
-
-			elif [ "$Choice" == "Save" ]; then
-				echo -e "\nFetching save file..."
-				sleep 1
-				wget https://github.com/the-outcaster/competitive-smash-decker/raw/main/100_save_data-1.zip
-				mv 100_save_data-1.zip $HOME/Downloads/
-
-				info "HDR save file saved to $HOME/Downloads/. Open Ryujinx -> Right-click Smash Ultimate -> Open User Save Directory and extract the save file to this location."
-			fi
-		done
-	
 	elif [ "$Choice" == "Overclock" ]; then
 		curl -L https://raw.githubusercontent.com/the-outcaster/gcadapter-oc-kmod-deck/main/install_gcadapter-oc-kmod.sh | sh
 	fi
