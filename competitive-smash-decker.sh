@@ -71,8 +71,8 @@ slippi_menu() {
 	--column "Option"\
 	--column="Description"\
 	FALSE Download "Download or update the Slippi Launcher"\
-	FALSE Launch_Launcher "Launch Slippi Launcher"\
-	FALSE Slippi "Configure or play Slippi (without launcher)"\
+	FALSE Shortcut "Create desktop and Applications shortcut"\
+	FALSE SteamDeck "Download a pre-configured Steam Deck graphics and configuration template"\
 	TRUE Exit "Exit this submenu"
 }
 
@@ -100,17 +100,6 @@ hdr_menu() {
 	TRUE Exit "Exit this submenu"
 }
 
-hdr_ryu_menu() {
-	zen_nospam --width 700 --height 350 --list --radiolist --multiple --title "$title"\
-	--column ""\
-	--column "Option"\
-	--column="Description"\
-	FALSE Download "Download or update the HDR Launcher"\
-	FALSE Shortcut "Add a HDR Launcher shortcut to your desktop and Applications menu"\
-	FALSE Save "Get save data"\
-	TRUE Exit "Exit this submenu"
-}
-
 # roms
 smash64_ROM=$HOME/Emulation/roms/n64/smash64.z64
 melee_ROM=$HOME/Emulation/roms/gamecube/ssbm.iso
@@ -122,7 +111,6 @@ slippi_launcher=$HOME/Applications/Slippi-Launcher/Slippi-Launcher.AppImage
 slippi=$HOME/.config/Slippi\ Launcher/netplay/Slippi_Online-x86_64.AppImage
 project_plus=$HOME/Applications/ProjectPlus/Faster_Project_Plus-x86-64.AppImage
 hdr_launcher=$HOME/Applications/HDR/HDRLauncher.AppImage
-hdr_ryu_launcher=$HOME/Applications/HDR-Ryujinx/HDRLauncher.AppImage
 
 # Check if GitHub is reachable
 if ! curl -Is https://github.com | head -1 | grep 200 > /dev/null
@@ -193,18 +181,55 @@ Choice=$(main_menu)
 				chmod +x $slippi_launcher
 				info "Slippi Launcher downloaded/updated!"
 			
-			elif [ "$Choice" == "Launch_Launcher" ]; then
-				if ! [ -f $slippi_launcher ]; then
-					error "Slippi Launcher AppImage not found."
+			elif [ "$Choice" == "Shortcut" ]; then
+				echo -e "\nFetching icon..."
+				sleep 1
+				wget https://slippi.gg/static/media/SlippiLogo.54926e8ab7de3cabc854a38e5022d50f.svg
+				mv SlippiLogo.54926e8ab7de3cabc854a38e5022d50f.svg icon.svg
+				mv icon.svg $HOME/Applications/Slippi-Launcher/
+
+				echo -e "\nFetching desktop shortcut..."
+				sleep 1
+				wget https://github.com/the-outcaster/competitive-smash-decker/raw/main/slippi/slippi.desktop
+				cp slippi.desktop $HOME/Desktop/
+				cp slippi.desktop $HOME/.local/share/applications/
+				rm slippi.desktop
+
+				info "Slippi Launcher shortcut added!"
+
+			elif [ "$Choice" == "SteamDeck" ]; then
+				if ( question "This will overwrite any existing settings that you have for Slippi. Proceed?" ); then
+				yes |
+					echo -e "\nDownloading configuration template..."
+					sleep 1
+					wget https://github.com/the-outcaster/competitive-smash-decker/raw/main/slippi/Dolphin.ini
+
+					echo -e "\nDownloading graphics template..."
+					sleep 1
+					wget https://github.com/the-outcaster/competitive-smash-decker/raw/main/slippi/GFX.ini
+
+					echo -e "\nDownloading Steam Deck controller profile..."
+					sleep 1
+					wget https://github.com/the-outcaster/competitive-smash-decker/raw/main/slippi/deck.ini
+
+					echo -e "\nMoving configuration file..."
+					sleep 1
+					mkdir -p $HOME/.config/SlippiOnline/ # make this dir in case the user hasn't run Slippi yet
+					mv Dolphin.ini $HOME/.config/SlippiOnline/Config/
+
+					echo -e "\nMoving graphics config file..."
+					sleep 1
+					mv GFX.ini $HOME/.config/SlippiOnline/Config/
+
+					echo -e "\nMoving controller profile..."
+					sleep 1
+					mkdir -p $HOME/.config/SlippiOnline/Config/Profiles/ # make this dir in case the user hasn't run Slippi yet
+					mkdir -p $HOME/.config/SlippiOnline/Config/Profiles/GCPad/
+					mv deck.ini $HOME/.config/SlippiOnline/Config/Profiles/GCPad/
+
+					info "Steam Deck template downloaded!"
 				else
-					exec $slippi_launcher
-				fi
-			
-			elif [ "$Choice" == "Slippi" ]; then
-				if ! [ -f "$slippi" ]; then
-					error "Slippi AppImage not found."
-				else
-					exec "$slippi"
+					echo -e "\nUser canceled."
 				fi
 			fi
 		done
