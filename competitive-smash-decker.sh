@@ -215,6 +215,7 @@ Choice=$(main_menu)
 					echo -e "\nMoving configuration file..."
 					sleep 1
 					mkdir -p $HOME/.config/SlippiOnline/ # make this dir in case the user hasn't run Slippi yet
+					mkdir -p $HOME/.config/SlippiOnline/Config/
 					mv Dolphin.ini $HOME/.config/SlippiOnline/Config/
 
 					echo -e "\nMoving graphics config file..."
