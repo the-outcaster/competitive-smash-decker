@@ -1,7 +1,7 @@
 #!/usr/bin/env xdg-open
 [Desktop Entry]
 Exec=/home/deck/Applications/Slippi-Launcher/Slippi-Launcher.AppImage
-Icon=/home/deck/Applications/Slippi-Launcher/icon.svg
+Icon=/home/deck/Applications/Slippi-Launcher/icon.png
 Name=Slippi Launcher
 StartupNotify=false
 Terminal=false

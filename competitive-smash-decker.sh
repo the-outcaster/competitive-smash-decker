@@ -184,9 +184,9 @@ Choice=$(main_menu)
 			elif [ "$Choice" == "Shortcut" ]; then
 				echo -e "\nFetching icon..."
 				sleep 1
-				wget https://slippi.gg/static/media/SlippiLogo.54926e8ab7de3cabc854a38e5022d50f.svg
-				mv SlippiLogo.54926e8ab7de3cabc854a38e5022d50f.svg icon.svg
-				mv icon.svg $HOME/Applications/Slippi-Launcher/
+				wget https://cdn2.steamgriddb.com/icon/91c54670545feae3e41be1456f28aa17.png
+				mv 91c54670545feae3e41be1456f28aa17.png icon.png
+				mv icon.png $HOME/Applications/Slippi-Launcher/
 
 				echo -e "\nFetching desktop shortcut..."
 				sleep 1
