@@ -97,6 +97,7 @@ hdr_menu() {
 	FALSE Download "Download or update the HDR Launcher"\
 	FALSE Shortcut "Add a HDR Launcher shortcut to your desktop and Applications menu"\
 	FALSE Resources "Get save data, legacy discovery, latency slider, and configure online multiplayer"\
+    FALSE "Set Yuzu Folder" "Select your Yuzu folder if it differs from default (~/.local/share/yuzu)"\
 	TRUE Exit "Exit this submenu"
 }
 
@@ -111,6 +112,9 @@ slippi_launcher=$HOME/Applications/Slippi-Launcher/Slippi-Launcher.AppImage
 slippi=$HOME/.config/Slippi\ Launcher/netplay/Slippi_Online-x86_64.AppImage
 project_plus=$HOME/Applications/ProjectPlus/Faster_Project_Plus-x86-64.AppImage
 hdr_launcher=$HOME/Applications/HDR/HDRLauncher.AppImage
+
+# paths
+yuzu_path=$HOME/.local/share/yuzu
 
 # Check if GitHub is reachable
 if ! curl -Is https://github.com | head -1 | grep 200 > /dev/null
@@ -371,7 +375,7 @@ Choice=$(main_menu)
 				info "HDR Launcher added to desktop and Games menu!"
 
 			elif [ "$Choice" == "Resources" ]; then
-				if ! [ -d $HOME/.local/share/yuzu/sdmc/ultimate/arcropolis ]; then
+				if ! [ -d $yuzu_path/sdmc/ultimate/arcropolis ]; then
 					error "Arcropolis folder not found, please run Smash Ultimate at least once after HDR is installed to generate the config files/folders."
 					break
 				fi
@@ -381,13 +385,13 @@ Choice=$(main_menu)
 				echo "# Adding legacy discovery file..."
 				sleep 1
 				touch legacy_discovery
-				mv legacy_discovery $HOME/.local/share/yuzu/sdmc/ultimate/arcropolis/config/*/*/
+				mv legacy_discovery $yuzu_path/sdmc/ultimate/arcropolis/config/*/*/
 
 				echo "50"
 				echo "# Downloading save data..."
 				sleep 1
 				wget https://github.com/the-outcaster/competitive-smash-decker/raw/main/100_save_data-1.zip
-				PROFILE_FOLDER="$HOME/.local/share/yuzu/nand/user/save/0000000000000000"
+				PROFILE_FOLDER="$yuzu_path/nand/user/save/0000000000000000"
 				for d in "$PROFILE_FOLDER"/*; do
 					unzip -o -q 100_save_data-1.zip -d "$d/01006A800016E000" # unzip the save data to every profile
 				done
@@ -400,7 +404,7 @@ Choice=$(main_menu)
 					| grep "browser_download_url" \
 					| grep .nro \
 					| cut -d '"' -f 4)
-				curl -L "$DOWNLOAD_URL" -o $HOME/.local/share/yuzu/sdmc/atmosphere/contents/01006A800016E000/romfs/skyline/plugins/liblocal_latency_slider.nro
+				curl -L "$DOWNLOAD_URL" -o $yuzu_path/sdmc/atmosphere/contents/01006A800016E000/romfs/skyline/plugins/liblocal_latency_slider.nro
 
 				echo "90"
 				echo "# Configurating multiplayer lobby settings..."
@@ -419,7 +423,10 @@ Choice=$(main_menu)
 				) | progress_bar ""
 
 				info "HDR resources successfully downloaded and installed!"
-			fi
+			
+            elif [ "$Choice" == "Set Yuzu Folder" ]; then
+                yuzu_path=$(zen_nospam  --file-selection --title="Select Yuzu Folder" --directory)
+            fi
 		done
 
 	elif [ "$Choice" == "Overclock" ]; then
