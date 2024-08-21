@@ -97,7 +97,18 @@ hdr_menu() {
 	FALSE Download "Download or update the HDR Launcher"\
 	FALSE Shortcut "Add a HDR Launcher shortcut to your desktop and Applications menu"\
 	FALSE Resources "Get save data, legacy discovery, latency slider, and configure online multiplayer"\
+	FALSE "Toggle HDR" "Switch between HDR and vanilla Smash"\
     FALSE "Set Yuzu Folder" "Select your Yuzu folder if it differs from default (~/.local/share/yuzu)"\
+	TRUE Exit "Exit this submenu"
+}
+
+hdr_toggle_menu() {
+	zen_nospam --width 700 --height 350 --list --radiolist --multiple --title "$title"\
+	--column ""\
+	--column "Option"\
+	--column="Description"\
+	FALSE HDR "Switch to HDR version of Smash Ultimate"\
+	FALSE Vanilla "Switch to vanilla version of Smash Ultimate"\
 	TRUE Exit "Exit this submenu"
 }
 
@@ -423,7 +434,50 @@ Choice=$(main_menu)
 				) | progress_bar ""
 
 				info "HDR resources successfully downloaded and installed!"
-			
+
+			elif [ "$Choice" == "Toggle HDR" ]; then
+				# Every other folder can stay the same, but some vanilla and HDR shaders are incompatible and will cause issues
+				sdmc_path="$yuzu_path/sdmc"
+				hdr_sdmc_path="$yuzu_path/sdmc.hdr"
+				ult_sdmc_path="$yuzu_path/sdmc.ult"
+				shader_path="$yuzu_path/shader"
+				hdr_shader_path="$yuzu_path/shader.hdr"
+				ult_shader_path="$yuzu_path/shader.ult"
+
+				if ! [[ -h $sdmc_path ]]; then # sdmc is not a symlink, so we need to do initial set up
+					info "Performing initial setup to allow SD card directory switching.\n\nYour HDR mods will now reside in '$hdr_sdmc_path'\n\nYour vanilla Ultimate mods will now reside in '$ult_sdmc_path'"
+
+					mv "$sdmc_path" "$hdr_sdmc_path"
+					mv "$shader_path" "$hdr_shader_path"
+					cp -r "$hdr_sdmc_path" "$ult_sdmc_path"
+					cp -r "$hdr_shader_path" "$ult_shader_path"
+
+					if [[ -d $ult_sdmc_path/atmosphere/ultimate/mods/hdr ]]; then
+						ln -s "$hdr_sdmc_path" "$sdmc_path"
+						ln -s "$hdr_shader_path" "$shader_path"
+						info "Your HDR installation has been copied to your new non-HDR SD card directory!\n\nMake sure to clean out HDR and any other unwanted mods from your vanilla Ultimate directory!"
+					else
+						ln -s "$ult_sdmc_path" "$sdmc_path"
+						ln -s "$ult_shader_path" "$shader_path"
+					fi
+				fi
+
+				while true; do
+					Choice=$(hdr_toggle_menu)
+					if [ $? -eq 1 ] || [ "$Choice" == "Exit" ]; then
+						break
+					elif [ "$Choice" == "HDR" ]; then
+						rm "$sdmc_path" "$shader_path"
+						ln -s "$hdr_sdmc_path" "$sdmc_path"
+						ln -s "$hdr_shader_path" "$shader_path"
+						info "Switched to HDR!"
+					elif [ "$Choice" == "Vanilla" ]; then
+						rm "$sdmc_path" "$shader_path"
+						ln -s "$ult_sdmc_path" "$sdmc_path"
+						ln -s "$ult_shader_path" "$shader_path"
+						info "Switched to Ultimate!"
+					fi
+				done
             elif [ "$Choice" == "Set Yuzu Folder" ]; then
                 yuzu_path=$(zen_nospam  --file-selection --title="Select Yuzu Folder" --directory)
             fi
